@@ -1,0 +1,30 @@
+class Pet:
+    name=''
+    sound=''
+    def whoami(self,legs,behavior):
+        if legs==2 and behavior=='会飞':
+            self.name='小鸟'
+            self.sound='Chirp Chirp'
+            print('我是'+self.name+'，'+self.sound)
+        elif legs==4 and behavior=='喵喵叫':
+            self.name='猫咪'
+            self.sound='Meow Meow'
+            print('我是'+self.name+'，'+self.sound)
+        elif legs==4 and behavior=='汪汪叫':
+                self.name='狗狗'
+                self.sound='Woof Woof'
+                print('我是'+self.name+'，'+self.sound)
+        else:
+            print('不是宠物哦')
+
+cat=Pet()
+cat.whoami(4,'喵喵叫')
+
+bird=Pet()
+bird.whoami(2,'会飞')
+
+dog=Pet()
+dog.whoami(4,'汪汪叫')
+
+other=Pet()
+other.whoami(4,'会飞')
