@@ -1,0 +1,159 @@
+main.py：
+from record import Record
+from statistics import Statistics
+from recommend import Recommend
+import time
+
+print('Hi 欢迎来到python emotion')
+time.sleep(1)
+print('这是一个心情管理小程序')
+time.sleep(1)
+print('python emotion有三个功能板块：记录、测评和推荐')
+print('输入功能名称可以进入对应功能')
+time.sleep(2)
+print('在记录板块里，可以写、查看和删除心情日记')
+print('功能名称：写日记 查看日记 删除日记')
+time.sleep(2)
+print('在测评板块里，可以计算当前心情分数')
+print('功能名称：计算分数')
+time.sleep(2)
+print('在推荐板块里，可以根据当前心情分数，推荐一些适合的网站')
+print('功能名称：推荐')
+time.sleep(2)
+print('退出小程序请输入 退出')
+time.sleep(2)
+
+score=0
+myrecord=Record()
+stat=Statistics()
+recom=Recommend()
+
+while True:
+    order=input('请输入功能名称：')
+    if order=='写日记':
+        myrecord.write_note()
+
+    elif order=='查看日记':
+        myrecord.read_note()
+
+    elif order=='删除日记':
+        myrecord.del_note()
+
+    elif order=='计算分数':
+        dict=myrecord.note
+        stat.calc_mood_score(dict)
+        print('已经计算出分数，快去试试推荐功能吧')
+
+    elif order=='推荐':
+        score=stat.score
+        recom.recomm(score)
+
+    elif order=='退出':
+        break
+
+    else :
+        print('没有对应的功能，请检查后再输入')
+
+record.py:
+class Record():
+    note={}
+    titlelist=[]
+
+    def write_note(self):
+        title=input('请输入题目：')
+        text=input('请输入正文：')
+        self.note[title]=text
+        if title not in self.titlelist:
+            self.titlelist.append(title)
+
+    def read_note(self):
+        title = input('请输入要查看的日记题目：')
+        if title in self.titlelist:
+            print(self.note[title])
+        else:
+            print('没有找到这篇日记')
+
+    def del_note(self):
+        title = input('请输入要删除的日记题目：')
+        if title in self.titlelist:
+            self.note.pop(title)
+            print('已删除'+title)
+        else:
+            print('没有找到这篇日记')
+
+statistics.py:
+class Statistics():
+    score=0
+    word_count = {}
+    mood_words_list=[
+        '开心',
+        '高兴',
+        '得意',
+        '平淡',
+        '无聊',
+        '烦',
+        '郁闷',
+        '不开心',
+    ]
+
+    def get_word_count(self,dict):
+        textcollect=''
+        for text in dict.values():
+            textcollect += text
+
+        #初始化计数字典
+        for word in self.mood_words_list:
+            self.word_count[word]=0
+
+        for word in self.mood_words_list:
+            if word in textcollect:
+                self.word_count[word]=textcollect.count(word)
+
+        self.word_count['开心']-=self.word_count['不开心']
+
+    def calc_mood_score(self,dict):
+        self.get_word_count(dict)
+        tmp=self.word_count['开心']+self.word_count['高兴']+self.word_count['得意']
+        self.score += tmp * 5
+
+        tmp =self.word_count['平淡']+self.word_count['无聊']
+        self.score += tmp * 0
+
+        tmp=self.word_count['烦']+self.word_count['郁闷']+self.word_count['不开心']
+        self.score -= tmp * 5
+
+recommend.py:
+import time
+
+class Recommend():
+
+    def recomm(self,score):
+        if score>5:
+            print('恭喜你，心情状态很好呢')
+            time.sleep(1)
+            time.sleep(1)
+            print('放松一下，看个电影吧，指路👉https://movie.douban.com/subject/1291843/')
+            time.sleep(1)
+            print('推荐 黑客帝国 The Matrix')
+            time.sleep(1)
+            print('这部电影和计算机技术息息相关，希望看完后能提高你对编程语言的兴趣')
+
+        elif -5<=score<=5:
+            print('心情很平静呀')
+            time.sleep(1)
+            print('“宠辱不惊，看庭前花开花落；物我俱忘，任天外云卷云舒”是一种心态，更是一种境界')
+            time.sleep(1)
+            print('指路')
+            time.sleep(1)
+            print('推荐这本书哦')
+            time.sleep(1)
+            print('这是一个惊人的故事，能真正鼓舞人心')
+
+        else :
+            print('心情有些低落呢')
+            time.sleep(1)
+            print('再苦再累，只要坚持往前走，属于你的风景终会出现')
+            time.sleep(1)
+            print('指路')
+            time.sleep(1)
+            print('让萌宠来治愈你吧😺')
